@@ -1,7 +1,27 @@
-import Image from "next/image";
+"use client";
 import { redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
+
+interface User {
+  name: string;
+  email: string;
+  image: string;
+}
+
+interface Session {
+  user: User;
+}
 
 export default function Home() {
-  redirect("/login");
-  return <div></div>;
+  const { data: session } = useSession();
+  console.log(session);
+  console.log(session?.user?.name);
+  console.log(session?.user?.email);
+  console.log(session?.user?.image);
+
+  if (!session) {
+    return redirect("/login");
+  }
+
+  return <div>You are logged in!</div>;
 }

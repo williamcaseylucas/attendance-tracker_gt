@@ -1,6 +1,7 @@
 "use client";
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 interface User {
   name: string;
@@ -23,5 +24,15 @@ export default function Home() {
     return redirect("/login");
   }
 
-  return <div>You are logged in!</div>;
+  return (
+    <div className="flex items-center justify-center h-[calc(100%-3.5rem)]">
+      <div>
+        <Link href="/classrooms">
+          <button className="bg-blue-200 rounded-lg p-3">
+            Go to classrooms
+          </button>
+        </Link>
+      </div>
+    </div>
+  );
 }

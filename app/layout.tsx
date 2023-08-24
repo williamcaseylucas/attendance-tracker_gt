@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Navbar from "./components/Navbar";
+import NextProvider from "./components/NextProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,8 +21,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <main className="w-full h-screen">
-          <Navbar />
-          <AuthProvider>{children}</AuthProvider>
+          <NextProvider>
+            <Navbar />
+            <AuthProvider>{children}</AuthProvider>
+          </NextProvider>
         </main>
       </body>
     </html>

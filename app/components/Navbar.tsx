@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { TbDrone } from "react-icons/tb";
 
@@ -16,21 +17,26 @@ const Navbar = (props: Props) => {
           </div>
           <div>
             <ul className="flex gap-2 p-2">
-              <li className="hover:bg-slate-200 hover:border-orange-200 hover:rounded-lg p-2 hover:border  cursor-pointer">
+              {/* <li className="hover:bg-slate-200 hover:border-orange-200 hover:rounded-lg p-2 hover:border  cursor-pointer">
                 Home
               </li>
               <li className="hover:bg-slate-200 hover:border-orange-200 hover:rounded-lg p-2 hover:border  cursor-pointer">
                 Classrooms
-              </li>
-              <li className="hover:bg-slate-200 hover:border-orange-200 hover:rounded-lg p-2 hover:border  cursor-pointer">
-                Attendence Record
-              </li>
-              <li className="hover:bg-slate-200 hover:border-orange-200 hover:rounded-lg p-2 hover:border  cursor-pointer">
-                Students
-              </li>
-              <li className="mr-3 hover:bg-slate-200 hover:border-orange-200 hover:rounded-lg p-2 hover:border  cursor-pointer">
+              </li> */}
+              <Link href={"/students"}>
+                <li className="hover:bg-slate-200 hover:border-orange-200 hover:rounded-lg p-2 hover:border  cursor-pointer">
+                  Students
+                </li>
+              </Link>
+
+              <Link href={"/attendance"}>
+                <li className="hover:bg-slate-200 hover:border-orange-200 hover:rounded-lg p-2 hover:border  cursor-pointer">
+                  Attendence
+                </li>
+              </Link>
+              {/* <li className="mr-3 hover:bg-slate-200 hover:border-orange-200 hover:rounded-lg p-2 hover:border  cursor-pointer">
                 Sign out
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

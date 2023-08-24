@@ -3,7 +3,7 @@ import { useState } from "react";
 
 type Props = {};
 
-const Form = (props: Props) => {
+const AddStudent = (props: Props) => {
   const [fields, setFields] = useState([{ name: "", email: "" }]);
 
   const handleAddField = () => {
@@ -120,4 +120,4 @@ const Form = (props: Props) => {
   );
 };
 
-export default Form;
+export default AddStudent;

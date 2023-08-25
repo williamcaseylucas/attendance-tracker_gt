@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import { addWebsocket } from "../redux/websocketSlice";
 import { useDispatch } from "react-redux";
+import { ExportToCsv } from "export-to-csv";
 
 const colors = [
   "#7fb069",
@@ -77,21 +78,6 @@ const Attendance = (props: Props) => {
     return () => ws.close();
   }, []);
 
-  const sendMessage = () => {
-    if (message.length !== 0) {
-      websckt?.send(message);
-      if (websckt) {
-        websckt.onmessage = (e) => {
-          const message = JSON.parse(e.data);
-          setMessages([...messages, message]);
-        };
-        setMessage("");
-      }
-    } else {
-      console.log("enter a value!");
-    }
-  };
-
   return (
     <div className="h-[calc(100%-3.5rem)] flex items-center justify-evenly">
       {/* QR Code */}
@@ -140,6 +126,13 @@ const Attendance = (props: Props) => {
               </span>
             );
           })}
+        </div>
+        <div>
+          <Link href={"/students"}>
+            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2">
+              Close Session
+            </button>
+          </Link>
         </div>
       </div>
     </div>

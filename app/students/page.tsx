@@ -2,9 +2,12 @@
 import React, { useEffect, useState } from "react";
 import AddStudent from "../components/AddStudent";
 import { FaRegEdit } from "react-icons/fa";
-import { AiOutlineDelete } from "react-icons/ai";
+// import { CSVLink } from "react-csv";
+import { AiOutlineDelete, AiOutlineMinus } from "react-icons/ai";
+import { BsPlusLg } from "react-icons/bs";
 import Link from "next/link";
 import axios from "axios";
+import { ExportToCsv } from "export-to-csv";
 
 type Props = {};
 
@@ -32,7 +35,99 @@ const dummy = [
   },
 ];
 
-const Table = ({ data, handleDelete }) => {
+const Table = ({ data, setData }) => {
+  const handleDelete = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    idx: number
+  ) => {
+    e.preventDefault();
+    // console.log(idx);
+    // console.log(data[idx]);
+
+    const { id } = data[idx];
+
+    const { data: dt } = await axios.delete(
+      `${process.env.NEXT_PUBLIC_SERVER_DEV}/${id}`
+    );
+    console.log("response: ", dt);
+    setData(
+      data.filter((item: any, index: number) => {
+        if (index !== idx) return item;
+      })
+    );
+  };
+
+  const handleDecrement = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    idx: number
+  ) => {
+    e.preventDefault();
+
+    const { id } = data[idx];
+
+    const updatedData = [...data]; // Create a copy of the data array
+
+    if (e.target?.id === "attended") {
+      // Update the attendance count in the copy of the array
+      updatedData[idx] = {
+        ...updatedData[idx],
+        attended:
+          updatedData[idx].attended - 1 >= 0
+            ? updatedData[idx].attended - 1
+            : 0,
+      };
+    } else {
+      // Update the attendance count in the copy of the array
+      updatedData[idx] = {
+        ...updatedData[idx],
+        missed:
+          updatedData[idx].missed - 1 >= 0 ? updatedData[idx].missed - 1 : 0,
+      };
+    }
+
+    const { data: dt } = await axios.put(
+      `${process.env.NEXT_PUBLIC_SERVER_DEV}/${id}`,
+      updatedData[idx]
+    );
+
+    console.log("output from server: ", dt);
+
+    setData(updatedData);
+  };
+
+  const handleIncrement = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+    idx: number
+  ) => {
+    e.preventDefault();
+
+    const { id } = data[idx];
+
+    const updatedData = [...data]; // Create a copy of the data array
+
+    if (e.target?.id === "attended") {
+      // Update the attendance count in the copy of the array
+      updatedData[idx] = {
+        ...updatedData[idx],
+        attended: updatedData[idx].attended + 1,
+      };
+    } else {
+      // Update the attendance count in the copy of the array
+      updatedData[idx] = {
+        ...updatedData[idx],
+        missed: updatedData[idx].missed + 1,
+      };
+    }
+
+    const { data: dt } = await axios.put(
+      `${process.env.NEXT_PUBLIC_SERVER_DEV}/${id}`,
+      updatedData[idx]
+    );
+
+    console.log("output from server: ", dt);
+
+    setData(updatedData);
+  };
   return (
     <div className="w-full relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -47,11 +142,17 @@ const Table = ({ data, handleDelete }) => {
             <th scope="col" className="px-6 py-3">
               Attended
             </th>
+            <th scope="col" className="py-3">
+              Increment/Decrement Attendance
+            </th>
             <th scope="col" className="px-6 py-3">
               Missed
             </th>
             <th scope="col" className="py-3">
-              Action
+              Increment/Decrement Missed
+            </th>
+            <th scope="col" className="py-3">
+              Delete
             </th>
           </tr>
         </thead>
@@ -75,9 +176,49 @@ const Table = ({ data, handleDelete }) => {
               </th>
               <td className="px-6 py-4">{item.email}</td>
               <td className="px-6 py-4">{item.attended}</td>
+              <td className="py-4 inline-block">
+                <span className="font-medium text-white bg-green-600 rounded-full inline-flex items-center justify-center p-1 mr-4">
+                  {/* <FaRegEdit size={15} className="cursor-pointer" /> */}
+                  <BsPlusLg
+                    size={17.5}
+                    className="cursor-pointer"
+                    id="attended"
+                    onClick={(e: any) => handleIncrement(e, idx)}
+                  />
+                </span>
+                <span className="font-medium text-white bg-orange-600 rounded-full inline-flex items-center justify-center p-1 gap-2">
+                  {/* <FaRegEdit size={15} className="cursor-pointer" /> */}
+                  <AiOutlineMinus
+                    size={17.5}
+                    className="cursor-pointer"
+                    id="attended"
+                    onClick={(e: any) => handleDecrement(e, idx)}
+                  />
+                </span>
+              </td>
               <td className="px-6 py-4">{item.missed}</td>
-              <td className="py-4 pl-4">
-                <div className="font-medium text-white flex items-center">
+              <td className="py-4 inline-block">
+                <span className="font-medium text-white bg-green-600 rounded-full inline-flex items-center justify-center p-1 mr-4">
+                  {/* <FaRegEdit size={15} className="cursor-pointer" /> */}
+                  <BsPlusLg
+                    size={17.5}
+                    className="cursor-pointer"
+                    id="missed"
+                    onClick={(e: any) => handleIncrement(e, idx)}
+                  />
+                </span>
+                <span className="font-medium text-white bg-orange-600 rounded-full inline-flex items-center justify-center p-1 gap-2">
+                  {/* <FaRegEdit size={15} className="cursor-pointer" /> */}
+                  <AiOutlineMinus
+                    size={17.5}
+                    className="cursor-pointer"
+                    id="missed"
+                    onClick={(e: any) => handleDecrement(e, idx)}
+                  />
+                </span>
+              </td>
+              <td className="py-4 pl-3">
+                <div className="font-medium text-white bg-red-600 rounded-full inline-flex items-center justify-center p-1">
                   {/* <FaRegEdit size={15} className="cursor-pointer" /> */}
                   <AiOutlineDelete
                     size={17.5}
@@ -96,9 +237,13 @@ const Table = ({ data, handleDelete }) => {
 
 const Students = (props: Props) => {
   const [closed, setClosed] = useState(false);
+  const [imprt, setImprt] = useState(false);
   const [field, setField] = useState({ name: "", email: "" });
   // const [data, setData] = useState(dummy);
+  const [file, setFile] = useState<File | undefined | null>();
   const [data, setData] = useState<any>([]);
+
+  const fileReader = new FileReader();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -112,6 +257,7 @@ const Students = (props: Props) => {
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     if (e.target.placeholder === "Name") {
       setField({ ...field, name: e.target.value });
     } else {
@@ -120,6 +266,7 @@ const Students = (props: Props) => {
   };
 
   const handleAdd = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     const { data: dt } = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_DEV}`,
       {
@@ -133,24 +280,48 @@ const Students = (props: Props) => {
     setField({ name: "", email: "" });
   };
 
-  const handleDelete = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-    idx: number
-  ) => {
-    console.log(idx);
-    console.log(data[idx]);
+  // const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   // setFile(e?.target?.files[0]);
+  // };
 
-    const { id } = data[idx];
+  // const handleFileUpload = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   e.preventDefault();
+  //   if (file) {
+  //     fileReader.onload = (event) => {
+  //       const csvOutput = event?.target?.result;
+  //     };
 
-    const { data: dt } = await axios.delete(
-      `${process.env.NEXT_PUBLIC_SERVER_DEV}/${id}`
-    );
-    console.log("response: ", dt);
-    setData(
-      data.filter((item: any, index: number) => {
-        if (index !== idx) return item;
-      })
-    );
+  //     fileReader.readAsText(file);
+  //   }
+  //   setImprt(false);
+  // };
+
+  const downloadCSV = (e: any) => {
+    const options = {
+      fieldSeparator: ",",
+      filename: "VIP_attendance",
+      quoteStrings: '"',
+      decimalSeparator: ".",
+      showLabels: true,
+      showTitle: true,
+      title: "Student Attendence",
+      useTextFile: false,
+      useBom: true,
+      useKeysAsHeaders: true,
+      // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
+    };
+
+    const csvExporter = new ExportToCsv(options);
+    csvExporter.generateCsv([
+      {
+        name: "Will",
+        email: "wrunyon3",
+      },
+      {
+        name: "Susan",
+        email: "susan",
+      },
+    ]);
   };
 
   return (
@@ -160,11 +331,26 @@ const Students = (props: Props) => {
           <div className="flex justify-end gap-2 mt-2 mb-2">
             {!closed ? (
               <div>
+                {/* <button
+                    onClick={() => setImprt(true)}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                  >
+                    Import from CSV
+                  </button> */}
                 <button
                   onClick={() => setClosed(!closed)}
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
                 >
                   Add Student
+                </button>
+                <button
+                  onClick={downloadCSV}
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                >
+                  Download CSV
+                </button>
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+                  Email CSV
                 </button>
                 <Link href={"/attendance"}>
                   <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -173,6 +359,23 @@ const Students = (props: Props) => {
                 </Link>
               </div>
             ) : (
+              // !imprt ? (
+              // ) : (
+              //   <div>
+              //     <input
+              //       onChange={handleOnChange}
+              //       className="mr-2"
+              //       type="file"
+              //       accept=".csv"
+              //     />
+              //     <button
+              //       onClick={handleFileUpload}
+              //       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+              //     >
+              //       Upload
+              //     </button>
+              //   </div>
+              // )
               <>
                 <input
                   type="text"
@@ -209,7 +412,7 @@ const Students = (props: Props) => {
         {data.length === 0 ? (
           "Add students!"
         ) : (
-          <Table data={data} handleDelete={handleDelete} />
+          <Table data={data} setData={setData} />
         )}
       </div>
       {/* <AddStudent />*/}

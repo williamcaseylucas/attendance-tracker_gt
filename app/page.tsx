@@ -25,6 +25,7 @@ export default function Home() {
     return redirect("/login");
   }
 
+  return redirect("/students");
   return (
     <div>
       <Students />

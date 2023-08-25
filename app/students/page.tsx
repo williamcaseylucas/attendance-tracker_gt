@@ -128,6 +128,19 @@ const Table = ({ data, setData }) => {
 
     setData(updatedData);
   };
+
+  const handleDate = (date: Date) => {
+    const dateObject = new Date(date);
+
+    const year = dateObject.getFullYear(); // 2023
+    const month = dateObject.getMonth(); // 7 (months are zero-based, so August is 7)
+    const day = dateObject.getDate(); // 25
+    const hours = dateObject.getHours(); // 12
+    const minutes = dateObject.getMinutes(); // 34
+    const seconds = dateObject.getSeconds(); // 56
+
+    return `${month + 1}/${day}/${year} at ${hours}:${minutes}`;
+  };
   return (
     <div className="w-full relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -138,6 +151,9 @@ const Table = ({ data, setData }) => {
             </th>
             <th scope="col" className="px-6 py-3">
               Email
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Last Attended
             </th>
             <th scope="col" className="px-6 py-3">
               Attended
@@ -175,6 +191,7 @@ const Table = ({ data, setData }) => {
                 {item.name}
               </th>
               <td className="px-6 py-4">{item.email}</td>
+              <td className="px-6 py-4">{handleDate(item?.date)}</td>
               <td className="px-6 py-4">{item.attended}</td>
               <td className="py-4 inline-block">
                 <span className="font-medium text-white bg-green-600 rounded-full inline-flex items-center justify-center p-1 mr-4">
@@ -274,6 +291,7 @@ const Students = (props: Props) => {
         attended: 0,
         missed: 0,
         present: false,
+        date: new Date().toISOString(),
       }
     );
     data.push(dt);
@@ -312,16 +330,17 @@ const Students = (props: Props) => {
     };
 
     const csvExporter = new ExportToCsv(options);
-    csvExporter.generateCsv([
-      {
-        name: "Will",
-        email: "wrunyon3",
-      },
-      {
-        name: "Susan",
-        email: "susan",
-      },
-    ]);
+    csvExporter.generateCsv(data);
+    // csvExporter.generateCsv([
+    //   {
+    //     name: "Will",
+    //     email: "wrunyon3",
+    //   },
+    //   {
+    //     name: "Susan",
+    //     email: "susan",
+    //   },
+    // ]);
   };
 
   return (
@@ -349,9 +368,9 @@ const Students = (props: Props) => {
                 >
                   Download CSV
                 </button>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+                {/* <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
                   Email CSV
-                </button>
+                </button> */}
                 <Link href={"/attendance"}>
                   <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Create Session

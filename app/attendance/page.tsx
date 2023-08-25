@@ -5,6 +5,7 @@ import QRCode from "react-qr-code";
 import { addWebsocket } from "../redux/websocketSlice";
 import { useDispatch } from "react-redux";
 import { ExportToCsv } from "export-to-csv";
+import axios from "axios";
 
 const colors = [
   "#7fb069",
@@ -32,6 +33,35 @@ const Attendance = (props: Props) => {
   >([]);
   const [status, setStatus] = useState(false);
   const dispatch = useDispatch();
+
+  // Update server with session id and lat/lon
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      let lat;
+      let lon;
+      navigator.geolocation.getCurrentPosition(function (position) {
+        // console.log("Latitude is :", position.coords.latitude);
+        // console.log("Longitude is :", position.coords.longitude);
+        lat = position.coords.latitude;
+        lon = position.coords.longitude;
+
+        console.log({
+          id: clientId,
+          coords: [parseFloat(lat?.toFixed(2)), parseFloat(lon?.toFixed(2))],
+        });
+
+        const syncWithDb = async () => {
+          await axios.put(`${process.env.NEXT_PUBLIC_SERVER_DEV}/register`, {
+            id: clientId,
+            coords: [parseFloat(lat?.toFixed(2)), parseFloat(lon?.toFixed(2))],
+          });
+        };
+        syncWithDb();
+      });
+    } else {
+      console.log("Not Available");
+    }
+  }, []);
 
   if (websckt) {
     const ws = websckt;

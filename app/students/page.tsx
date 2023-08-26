@@ -8,6 +8,7 @@ import { BsPlusLg } from "react-icons/bs";
 import Link from "next/link";
 import axios from "axios";
 import { ExportToCsv } from "export-to-csv";
+import moment from "moment";
 
 type Props = {};
 
@@ -139,7 +140,11 @@ const Table = ({ data, setData }) => {
     const minutes = dateObject.getMinutes(); // 34
     const seconds = dateObject.getSeconds(); // 56
 
-    return `${month + 1}/${day}/${year} at ${hours}:${minutes}`;
+    // Create a Moment.js object from the date values
+    const formattedDate = moment({ year, month, day, hours, minutes, seconds });
+
+    // Format the date using the desired format
+    return formattedDate.format("YYYY-MM-DD HH:mm:ss A");
   };
   return (
     <div className="w-full relative overflow-x-auto shadow-md sm:rounded-lg">

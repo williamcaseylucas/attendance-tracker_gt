@@ -53,7 +53,7 @@ const Attendance = (props: Props) => {
         const syncWithDb = async () => {
           await axios.put(`${process.env.NEXT_PUBLIC_SERVER_DEV}/register`, {
             id: clientId,
-            coords: [parseFloat(lat?.toFixed(2)), parseFloat(lon?.toFixed(2))],
+            coords: [parseFloat(lat), parseFloat(lon)],
           });
         };
         syncWithDb();
@@ -108,6 +108,12 @@ const Attendance = (props: Props) => {
     return () => ws.close();
   }, []);
 
+  const handleCloseSession = () => {
+    const closeSession = async () => {
+      await axios.get(`${process.env.NEXT_PUBLIC_SERVER_DEV}/close_attendance`);
+    };
+    closeSession();
+  };
   return (
     <div className="h-[calc(100%-3.5rem)] flex items-center justify-evenly">
       {/* QR Code */}
@@ -159,7 +165,10 @@ const Attendance = (props: Props) => {
         </div>
         <div>
           <Link href={"/students"}>
-            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2">
+            <button
+              onClick={handleCloseSession}
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2"
+            >
               Close Session
             </button>
           </Link>

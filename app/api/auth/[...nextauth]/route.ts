@@ -41,11 +41,13 @@ const authOptions: NextAuthOptions = {
           checkValidUsers(profile.email);
 
         // Return a string or boolean value wrapped in a Promise.resolve()
-        return Promise.resolve(
-          isValidUser ? "authenticated" : "unauthenticated"
-        );
+        // return Promise.resolve(
+        //   isValidUser ? "authenticated" : "unauthenticated"
+        // );
+        return isValidUser ? true : "";
       }
-      return Promise.resolve("authenticated");
+      return "";
+      // return Promise.resolve("authenticated");
     },
   },
 };

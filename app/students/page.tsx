@@ -271,11 +271,41 @@ const Students = (props: Props) => {
 
   // const fileReader = new FileReader();
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
-  if (!session) {
+  if (status == "unauthenticated") {
     return redirect("/login");
   }
+
+  // useEffect(() => {
+  //   console.log("new Date(): ", new Date().toISOString());
+  //   console.log("moment: ", moment(new Date()).format());
+  // }, []);
+
+  useEffect(() => {
+    const asyncFunc = async (name: string, email: string) => {
+      const { data: dt } = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_DEV}`,
+        {
+          name,
+          email,
+          attended: 0,
+          missed: 0,
+          // present: false,
+          // date: new Date().toISOString(),
+          date: moment(new Date()).format(),
+        }
+      );
+      data.push(dt);
+    };
+    importCSVData.forEach(({ name, email }) => {
+      console.log(name, email);
+
+      if (name && email) {
+        asyncFunc(name, email);
+      }
+    });
+  }, [importCSVData]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -305,8 +335,9 @@ const Students = (props: Props) => {
         ...field,
         attended: 0,
         missed: 0,
-        present: false,
-        date: new Date().toISOString(),
+        // present: false,
+        // date: new Date().toISOString(),
+        date: moment(new Date()).format(),
       }
     );
     data.push(dt);

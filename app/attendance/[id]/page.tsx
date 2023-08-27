@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { usePathname } from "next/navigation";
+import moment from "moment";
 
 type Props = {};
 
@@ -121,7 +122,8 @@ const AttendenceID = (props: Props) => {
           `${process.env.NEXT_PUBLIC_SERVER_DEV}/attendance`,
           {
             email: message,
-            date: new Date().toISOString(),
+            date: moment(new Date()).format(),
+            // date: new Date().toISOString(),
           }
         );
 

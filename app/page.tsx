@@ -15,17 +15,6 @@ interface Session {
 }
 
 export default function Home() {
-  const { data: session } = useSession();
-
-  // console.log(session);
-  // console.log(session?.user?.name);
-  // console.log(session?.user?.email);
-  // console.log(session?.user?.image);
-
-  // if (!session) {
-  //   return redirect("/login");
-  // }
-
   return redirect("/students");
   return (
     <div>

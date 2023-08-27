@@ -36,12 +36,11 @@ const Attendance = (props: Props) => {
   const [status, setStatus] = useState(false);
   // const dispatch = useDispatch();
 
-  const { data: session } = useSession();
+  const { data: session, status: sessionStatus } = useSession();
 
-  if (!session) {
+  if (sessionStatus == "unauthenticated") {
     return redirect("/login");
   }
-
   // Update server with session id and lat/lon
   useEffect(() => {
     if ("geolocation" in navigator) {

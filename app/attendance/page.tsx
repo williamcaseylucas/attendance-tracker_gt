@@ -24,15 +24,18 @@ const colors = [
 
 type Props = {};
 
+type Message = {
+  message: string;
+  clientId: string;
+};
+
 const Attendance = (props: Props) => {
   const [clientId, setClientId] = useState<number>(
     Math.floor(new Date().getTime() / 1000)
   );
   const [websckt, setWbsckt] = useState<WebSocket>();
   const [message, setMessage] = useState<string>("");
-  const [messages, setMessages] = useState<
-    [{ message: string; clientId: string }] | []
-  >([]);
+  const [messages, setMessages] = useState<Message[] | []>([]);
   const [status, setStatus] = useState(false);
   // const dispatch = useDispatch();
 
@@ -44,8 +47,8 @@ const Attendance = (props: Props) => {
   // Update server with session id and lat/lon
   useEffect(() => {
     if ("geolocation" in navigator) {
-      let lat;
-      let lon;
+      let lat: number;
+      let lon: number;
       navigator.geolocation.getCurrentPosition(function (position) {
         // console.log("Latitude is :", position.coords.latitude);
         // console.log("Longitude is :", position.coords.longitude);
@@ -60,7 +63,7 @@ const Attendance = (props: Props) => {
         const syncWithDb = async () => {
           await axios.put(`${process.env.NEXT_PUBLIC_SERVER_DEV}/register`, {
             id: clientId,
-            coords: [parseFloat(lat), parseFloat(lon)],
+            coords: [lat, lon],
           });
         };
         syncWithDb();

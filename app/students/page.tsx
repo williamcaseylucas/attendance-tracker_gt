@@ -39,7 +39,13 @@ const dummy = [
   },
 ];
 
-const Table = ({ data, setData }) => {
+const Table = ({
+  data,
+  setData,
+}: {
+  data: Student[];
+  setData: React.Dispatch<React.SetStateAction<Student[]>>;
+}) => {
   const handleDelete = async (
     e: React.MouseEvent<HTMLButtonElement>,
     idx: number
@@ -48,7 +54,7 @@ const Table = ({ data, setData }) => {
     // console.log(idx);
     // console.log(data[idx]);
 
-    const { id } = data[idx];
+    const { id }: Student = data[idx];
 
     const { data: dt } = await axios.delete(
       `${process.env.NEXT_PUBLIC_SERVER_DEV}/${id}`
@@ -71,7 +77,7 @@ const Table = ({ data, setData }) => {
 
     const updatedData = [...data]; // Create a copy of the data array
 
-    if (e.target?.id === "attended") {
+    if ((e.target as HTMLButtonElement)?.id === "attended") {
       // Update the attendance count in the copy of the array
       updatedData[idx] = {
         ...updatedData[idx],
@@ -109,7 +115,7 @@ const Table = ({ data, setData }) => {
 
     const updatedData = [...data]; // Create a copy of the data array
 
-    if (e.target?.id === "attended") {
+    if ((e.target as HTMLButtonElement)?.id === "attended") {
       // Update the attendance count in the copy of the array
       updatedData[idx] = {
         ...updatedData[idx],
@@ -133,7 +139,7 @@ const Table = ({ data, setData }) => {
     setData(updatedData);
   };
 
-  const handleDate = (date: Date) => {
+  const handleDate = (date: string) => {
     const dateObject = new Date(date);
 
     const year = dateObject.getFullYear(); // 2023
@@ -183,7 +189,7 @@ const Table = ({ data, setData }) => {
         <tbody>
           {/* V1:  bg-white dark:bg-gray-900 dark:border-gray-700 */}
           {/* V2:  bg-gray-50 dark:bg-gray-800 dark:border-gray-700*/}
-          {data.map((item, idx) => (
+          {data.map((item: Student, idx: number) => (
             <tr
               key={idx}
               className={`border-b ${
@@ -260,13 +266,22 @@ const Table = ({ data, setData }) => {
   );
 };
 
+type Student = {
+  id?: number;
+  name: string;
+  email: string;
+  attended: number;
+  missed: number;
+  date: string;
+};
+
 const Students = (props: Props) => {
   const [closed, setClosed] = useState(false);
   const [imprt, setImprt] = useState(false);
   const [field, setField] = useState({ name: "", email: "" });
   // const [data, setData] = useState(dummy);
   const [file, setFile] = useState<File | undefined | null>();
-  const [data, setData] = useState<any>([]);
+  const [data, setData] = useState<Student[]>([]);
   const [importCSVData, setImportCSVData] = useState([]);
 
   // const fileReader = new FileReader();
@@ -345,13 +360,15 @@ const Students = (props: Props) => {
   };
 
   const uploadCSV = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e?.target?.files[0];
-    Papa.parse(file, {
-      header: true,
-      complete: (results: any) => {
-        setImportCSVData(results.data);
-      },
-    });
+    const file = e?.target?.files?.[0];
+    if (file) {
+      Papa.parse(file, {
+        header: true,
+        complete: (results: any) => {
+          setImportCSVData(results.data);
+        },
+      });
+    }
   };
 
   const downloadCSV = (e: any) => {

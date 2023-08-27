@@ -1,1 +1,5 @@
 To generate random key: openssl rand -base64 32
+
+eslint: "lint": "next lint"
+"eslint": "8.47.0",
+"eslint-config-next": "13.4.19",

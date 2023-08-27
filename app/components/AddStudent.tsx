@@ -2,15 +2,23 @@
 import { useState } from "react";
 
 type Props = {};
+type Field = {
+  name: string;
+  email: string;
+};
 
 const AddStudent = (props: Props) => {
-  const [fields, setFields] = useState([{ name: "", email: "" }]);
+  const [fields, setFields] = useState<Field[]>([{ name: "", email: "" }]);
 
   const handleAddField = () => {
     setFields([...fields, { name: "", email: "" }]);
   };
 
-  const handleFieldChange = (index: number, field: string, value: string) => {
+  const handleFieldChange = (
+    index: number,
+    field: keyof Field,
+    value: string
+  ) => {
     const updatedFields = [...fields];
     updatedFields[index][field] = value;
     setFields(updatedFields);

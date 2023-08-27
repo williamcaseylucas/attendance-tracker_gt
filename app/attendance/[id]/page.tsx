@@ -43,14 +43,19 @@ const AttendenceID = (props: Props) => {
   const [sent, setSent] = useState(false);
   const [wasLogged, setWasLogged] = useState(false);
   const [canView, setCanView] = useState(false);
-  const [idTeacher, setIdTeacher] = useState<int | undefined>();
+  const [idTeacher, setIdTeacher] = useState<number>();
   let params = usePathname();
   // const url = useSelector((state) => state.websocket.url);
   // console.log("state from redux: ", url);
   // const { query } = router;
 
   useEffect(() => {
-    setIdTeacher(parseInt(params?.split("/")?.pop()));
+    if (params) {
+      const parts = params.split("/");
+      if (parts.length > 0) {
+        setIdTeacher(parseInt(parts.pop() || ""));
+      }
+    }
   }, []);
 
   useEffect(() => {

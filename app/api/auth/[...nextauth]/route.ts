@@ -1,22 +1,44 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
+const validUsers = ["williamcaseylucas@gmail.com"];
+
+const checkValidUsers = (user: string) => {
+  for (let i = 0; i < validUsers.length; i++) {
+    if (user === validUsers[i]) return true;
+  }
+  return false;
+};
+
 const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+      // Allows us to get a new token every time we login and not just the first time
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
     }),
     // ...add more providers here
   ],
+  secret: process.env.NEXT_PUBLIC_JWT_SECRET,
+  // session: {
+  //   strategy: "jwt",
+  // },
   callbacks: {
     async signIn({ account, profile }) {
       if (account?.provider === "google") {
         return (
           profile?.email_verified &&
           profile?.email &&
-          profile?.email.endsWith("@gmail.com")
+          profile?.email.endsWith("@gmail.com") &&
+          checkValidUsers(profile.email)
         );
       }
       return true; // Do different verification for other providers that don't have `email_verified`

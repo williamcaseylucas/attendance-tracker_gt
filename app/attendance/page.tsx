@@ -6,6 +6,8 @@ import { addWebsocket } from "../redux/websocketSlice";
 import { useDispatch } from "react-redux";
 import { ExportToCsv } from "export-to-csv";
 import axios from "axios";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 const colors = [
   "#7fb069",
@@ -32,7 +34,13 @@ const Attendance = (props: Props) => {
     [{ message: string; clientId: string }] | []
   >([]);
   const [status, setStatus] = useState(false);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+
+  const { data: session } = useSession();
+
+  if (!session) {
+    return redirect("/login");
+  }
 
   // Update server with session id and lat/lon
   useEffect(() => {

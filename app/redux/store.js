@@ -3,16 +3,17 @@ import websocketReducer from "./websocketSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
-const persistConfig = {
-  key: "root",
-  storage,
-};
-const persistedReducer = persistReducer(persistConfig, websocketReducer);
+// const persistConfig = {
+//   key: "root",
+//   storage,
+// };
+// const persistedReducer = persistReducer(persistConfig, websocketReducer);
 
 export const store = configureStore({
   reducer: {
-    websocket: persistedReducer,
+    // websocket: persistedReducer,
+    websocket: websocketReducer,
   },
 });
 
-export const persistor = persistStore(store);
+// export const persistor = persistStore(store);

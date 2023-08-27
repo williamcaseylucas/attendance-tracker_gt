@@ -9,6 +9,9 @@ import Link from "next/link";
 import axios from "axios";
 import { ExportToCsv } from "export-to-csv";
 import moment from "moment";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import Papa from "papaparse";
 
 type Props = {};
 
@@ -264,8 +267,15 @@ const Students = (props: Props) => {
   // const [data, setData] = useState(dummy);
   const [file, setFile] = useState<File | undefined | null>();
   const [data, setData] = useState<any>([]);
+  const [importCSVData, setImportCSVData] = useState([]);
 
-  const fileReader = new FileReader();
+  // const fileReader = new FileReader();
+
+  const { data: session } = useSession();
+
+  if (!session) {
+    return redirect("/login");
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -303,21 +313,15 @@ const Students = (props: Props) => {
     setField({ name: "", email: "" });
   };
 
-  // const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   // setFile(e?.target?.files[0]);
-  // };
-
-  // const handleFileUpload = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   e.preventDefault();
-  //   if (file) {
-  //     fileReader.onload = (event) => {
-  //       const csvOutput = event?.target?.result;
-  //     };
-
-  //     fileReader.readAsText(file);
-  //   }
-  //   setImprt(false);
-  // };
+  const uploadCSV = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e?.target?.files[0];
+    Papa.parse(file, {
+      header: true,
+      complete: (results: any) => {
+        setImportCSVData(results.data);
+      },
+    });
+  };
 
   const downloadCSV = (e: any) => {
     const options = {
@@ -336,16 +340,6 @@ const Students = (props: Props) => {
 
     const csvExporter = new ExportToCsv(options);
     csvExporter.generateCsv(data);
-    // csvExporter.generateCsv([
-    //   {
-    //     name: "Will",
-    //     email: "wrunyon3",
-    //   },
-    //   {
-    //     name: "Susan",
-    //     email: "susan",
-    //   },
-    // ]);
   };
 
   return (
@@ -354,52 +348,54 @@ const Students = (props: Props) => {
         <div id="addStudent">
           <div className="flex justify-end gap-2 mt-2 mb-2">
             {!closed ? (
-              <div>
-                {/* <button
-                    onClick={() => setImprt(true)}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                  >
-                    Import from CSV
-                  </button> */}
-                <button
-                  onClick={() => setClosed(!closed)}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                >
-                  Add Student
-                </button>
-                <button
-                  onClick={downloadCSV}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                >
-                  Download CSV
-                </button>
-                {/* <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+              <>
+                {imprt ? (
+                  <div>
+                    <input
+                      onChange={uploadCSV}
+                      className="mr-2 inline-block text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600"
+                      type="file"
+                      accept=".csv"
+                    />
+                    <button
+                      onClick={() => setImprt(false)}
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2"
+                    >
+                      Close
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <button
+                      onClick={() => setImprt(true)}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                    >
+                      Import from CSV
+                    </button>
+                    <button
+                      onClick={() => setClosed(!closed)}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                    >
+                      Add Student
+                    </button>
+                    <button
+                      onClick={downloadCSV}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                    >
+                      Download CSV
+                    </button>
+                    {/* <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
                   Email CSV
                 </button> */}
-                <Link href={"/attendance"}>
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Create Session
-                  </button>
-                </Link>
-              </div>
+                    <Link href={"/attendance"}>
+                      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Create Session
+                      </button>
+                    </Link>
+                  </div>
+                )}
+              </>
             ) : (
-              // !imprt ? (
-              // ) : (
-              //   <div>
-              //     <input
-              //       onChange={handleOnChange}
-              //       className="mr-2"
-              //       type="file"
-              //       accept=".csv"
-              //     />
-              //     <button
-              //       onClick={handleFileUpload}
-              //       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-              //     >
-              //       Upload
-              //     </button>
-              //   </div>
-              // )
               <>
                 <input
                   type="text"

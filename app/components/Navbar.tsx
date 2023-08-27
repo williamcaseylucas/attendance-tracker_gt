@@ -1,3 +1,5 @@
+"use client";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 import { TbDrone } from "react-icons/tb";
@@ -5,6 +7,8 @@ import { TbDrone } from "react-icons/tb";
 type Props = {};
 
 const Navbar = (props: Props) => {
+  const { data: session } = useSession();
+
   return (
     <div>
       <nav className="bg-slate-100 h-14">
@@ -34,9 +38,14 @@ const Navbar = (props: Props) => {
                   Attendence
                 </li>
               </Link>
-              {/* <li className="mr-3 hover:bg-slate-200 hover:border-orange-200 hover:rounded-lg p-2 hover:border  cursor-pointer">
-                Sign out
-              </li> */}
+              {session && (
+                <li
+                  className="mr-3 hover:bg-slate-200 hover:border-orange-200 hover:rounded-lg p-2 hover:border  cursor-pointer"
+                  onClick={() => signOut()}
+                >
+                  Sign out
+                </li>
+              )}
             </ul>
           </div>
         </div>

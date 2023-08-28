@@ -93,7 +93,7 @@ const AttendenceID = (props: Props) => {
 
       getTeacherIdAndCoord();
     }
-  }, [idTeacher]);
+  }, [idTeacher, navigator]);
 
   useEffect(() => {
     const url = `ws://localhost:8000/ws/${clientId}`;

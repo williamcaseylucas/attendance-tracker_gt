@@ -94,7 +94,7 @@ const Attendance = (props: Props) => {
   useEffect(() => {
     // const url = "ws://localhost:8000/ws/" + clientId;
     // const url = `ws://localhost:8000/ws/${clientId}`;
-    const url = `ws://${process.env.NEXT_PUBLIC_SERVER_DEV}/ws/${clientId}`;
+    const url = `wss://${process.env.NEXT_PUBLIC_SERVER_DEV}/ws/${clientId}`;
     // dispatch(addWebsocket({ url: url }));
     const ws = new WebSocket(url);
 

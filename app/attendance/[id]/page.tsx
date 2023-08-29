@@ -96,9 +96,12 @@ const AttendenceID = (props: Props) => {
   }, [idTeacher, navigator]);
 
   useEffect(() => {
-    const url = `wss://${process.env.NEXT_PUBLIC_SERVER_DEV?.split(
-      "//"
-    )}/ws/${clientId}`;
+    const [httpVal, urlVal] = process.env.NEXT_PUBLIC_SERVER_DEV
+      ? process.env.NEXT_PUBLIC_SERVER_DEV?.split("://")
+      : [null, null];
+    const url = `${
+      httpVal === "http" ? "ws" : "wss"
+    }://${urlVal}/ws/${clientId}`;
     console.log("the id: ", clientId);
     if (url != null) {
       const ws = new WebSocket(url);

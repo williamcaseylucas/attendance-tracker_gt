@@ -170,8 +170,9 @@ const AttendenceID = (props: Props) => {
             {status ? (
               <>
                 {sent ? (
-                  `Thank you! ${
-                    wasLogged ? (
+                  <>
+                    <span>Thank you!</span>
+                    {wasLogged ? (
                       "Your attendance was logged!"
                     ) : (
                       <>
@@ -194,8 +195,8 @@ const AttendenceID = (props: Props) => {
                           Submit
                         </button>
                       </>
-                    )
-                  }`
+                    )}
+                  </>
                 ) : (
                   <>
                     <input
@@ -216,11 +217,11 @@ const AttendenceID = (props: Props) => {
                 )}
               </>
             ) : (
-              "Loading... (status)"
+              "Loading..."
             )}
           </>
         ) : (
-          "Loading... (canView)"
+          "Loading..."
         )}
       </div>
     </div>

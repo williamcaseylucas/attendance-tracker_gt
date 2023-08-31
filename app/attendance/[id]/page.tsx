@@ -124,9 +124,6 @@ const AttendenceID = (props: Props) => {
 
   const sendMessage = () => {
     if (message.length !== 0) {
-      websckt?.send(message);
-      setSent(true);
-
       const sendDataToDb = async () => {
         const { data } = await axios.put(
           `${process.env.NEXT_PUBLIC_SERVER_DEV}/attendance`,
@@ -141,6 +138,8 @@ const AttendenceID = (props: Props) => {
 
         if (data?.status_code !== 404) {
           setWasLogged(true);
+          websckt?.send(message);
+          setSent(true);
         }
       };
       sendDataToDb();
@@ -159,7 +158,7 @@ const AttendenceID = (props: Props) => {
       //   // setMessage("");
       // }
     } else {
-      console.log("enter a value!");
+      console.log("enter a valid email!");
     }
   };
   return (

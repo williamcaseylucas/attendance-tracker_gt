@@ -4,6 +4,7 @@ import AddStudent from "../components/AddStudent";
 import { FaRegEdit } from "react-icons/fa";
 // import { CSVLink } from "react-csv";
 import { AiOutlineDelete, AiOutlineMinus } from "react-icons/ai";
+import { FiRefreshCcw } from "react-icons/fi";
 import { BsPlusLg } from "react-icons/bs";
 import Link from "next/link";
 import axios from "axios";
@@ -322,14 +323,15 @@ const Students = (props: Props) => {
     });
   }, [importCSVData]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data: dt } = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER_DEV}`
-      );
-      setData(dt);
-    };
+  const fetchData = async () => {
+    const { data: dt } = await axios.get(
+      `${process.env.NEXT_PUBLIC_SERVER_DEV}`
+    );
+    setData(dt);
+  };
 
+  // Fetch data on original load
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -413,7 +415,13 @@ const Students = (props: Props) => {
                     </button>
                   </div>
                 ) : (
-                  <div>
+                  <div className="flex">
+                    <button
+                      className="bg-blue-500 hover:bg-blue-700 text-white p-1 my-auto mr-2 gap-2 h-10 w-10 flex items-center justify-center rounded-lg"
+                      onClick={() => fetchData()}
+                    >
+                      <FiRefreshCcw size={17.5} />
+                    </button>
                     <button
                       onClick={() => setImprt(true)}
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"

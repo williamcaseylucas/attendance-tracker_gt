@@ -140,6 +140,8 @@ const AttendenceID = (props: Props) => {
           setWasLogged(true);
           websckt?.send(message);
           setSent(true);
+        } else {
+          alert(`The provided email was not found: ${message}`);
         }
       };
       sendDataToDb();
@@ -169,33 +171,7 @@ const AttendenceID = (props: Props) => {
             {status ? (
               <>
                 {sent ? (
-                  <>
-                    <span>Thank you!</span>
-                    {wasLogged ? (
-                      "Your attendance was logged!"
-                    ) : (
-                      <>
-                        <span className="mb-2">
-                          Your attendance was not logged because the provided
-                          email did not match our database...
-                        </span>
-                        <input
-                          type="text"
-                          className="appearance-none block shadow-lg bg-gray-200 text-gray-700 border rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white mr-2"
-                          placeholder="Enter GT Email..."
-                          onChange={(e) => setMessage(e.target.value)}
-                          value={message}
-                        />
-                        <button
-                          id="submit"
-                          onClick={sendMessage}
-                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                        >
-                          Submit
-                        </button>
-                      </>
-                    )}
-                  </>
+                  "Thank you! Your attendance was logged!"
                 ) : (
                   <>
                     <input

@@ -1,7 +1,7 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
-const validUsers = ["williamcaseylucas@gmail.com"];
+const validUsers = ["williamcaseylucas@gmail.com", "mgmayo90@gmail.com"];
 
 const checkValidUsers = (user: string) => {
   for (let i = 0; i < validUsers.length; i++) {

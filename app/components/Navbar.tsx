@@ -34,7 +34,7 @@ const Navbar = (props: Props) => {
 
             <Link href={"/attendance"}>
               <li className="hover:bg-slate-200 hover:border-orange-200 hover:rounded-lg p-2 hover:border  cursor-pointer">
-                Attendence
+                Attendance
               </li>
             </Link>
             {session && (

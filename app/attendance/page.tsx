@@ -145,9 +145,9 @@ const Attendance = (props: Props) => {
         </Link>
       </div>
 
-      {/* Attendence viewer */}
+      {/* Attendance viewer */}
       <div className="flex flex-col items-center justify-center ">
-        <h1 className="text-4xl font-bold underline mb-2">Attendence</h1>
+        <h1 className="text-4xl font-bold underline mb-2">Attendance</h1>
         <h2 className="semi-bold text-lg mb-2">Your id: {clientId}</h2>
         <p className="text-lg semi-bold mb-2">
           Status:{" "}

@@ -84,7 +84,7 @@ const AttendenceID = (props: Props) => {
               setCanView(true);
             } else {
               alert(
-                "You are not in the classroom or are in an incorrect qr code session!"
+                "You are not in the classroom or are in an incorrect qr code session or are not close enough (make sure location services are turned on)!"
               );
             }
           });
@@ -128,7 +128,7 @@ const AttendenceID = (props: Props) => {
         const { data } = await axios.put(
           `${process.env.NEXT_PUBLIC_SERVER_DEV}/attendance`,
           {
-            email: message,
+            email: message.toLowerCase(),
             date: moment(new Date()).format(),
             // date: new Date().toISOString(),
           }
@@ -168,31 +168,33 @@ const AttendenceID = (props: Props) => {
       <div id="input" className="bg-blue-200 p-5 rounded-lg flex">
         {canView ? (
           <>
-            {status ? (
+            {/* {status ? (
               <>
-                {sent ? (
-                  "Thank you! Your attendance was logged!"
-                ) : (
-                  <>
-                    <input
-                      type="text"
-                      className="appearance-none block shadow-lg bg-gray-200 text-gray-700 border rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white mr-2"
-                      placeholder="Enter GT Email..."
-                      onChange={(e) => setMessage(e.target.value)}
-                      value={message}
-                    />
-                    <button
-                      id="submit"
-                      onClick={sendMessage}
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    >
-                      Submit
-                    </button>
-                  </>
-                )}
+                
               </>
             ) : (
               "Loading..."
+            )} */}
+
+            {sent ? (
+              "Thank you! Your attendance was logged!"
+            ) : (
+              <>
+                <input
+                  type="text"
+                  className="appearance-none block shadow-lg bg-gray-200 text-gray-700 border rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white mr-2"
+                  placeholder="Enter GT Email..."
+                  onChange={(e) => setMessage(e.target.value)}
+                  value={message}
+                />
+                <button
+                  id="submit"
+                  onClick={sendMessage}
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  Submit
+                </button>
+              </>
             )}
           </>
         ) : (

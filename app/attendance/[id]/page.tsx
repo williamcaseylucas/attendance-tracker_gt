@@ -84,10 +84,16 @@ const AttendenceID = (props: Props) => {
               setCanView(true);
             } else {
               alert(
-                "You are not in the classroom or are in an incorrect qr code session or are not close enough (make sure location services are turned on)!"
+                `studentID: ${primaryID}, teacherID: ${idTeacher}, distance: ${res}, teacher coordinates: ${coords}, student coordinates: ${lat}, ${lon}`
               );
             }
           });
+        } else {
+          // If geolocation is off, wait 10 seconds before alerting user to turn it back on again
+          setTimeout(() => {
+            if ("geolocation" in navigator)
+              alert(`Geolocation on?: ${"geolocation" in navigator}`);
+          }, 10000);
         }
       };
 

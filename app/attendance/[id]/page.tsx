@@ -93,7 +93,8 @@ const AttendenceID = (props: Props) => {
           setTimeout(() => {
             if ("geolocation" in navigator)
               alert(`Geolocation on?: ${"geolocation" in navigator}`);
-          }, 10000);
+            else alert("geolocation on device not giving coordinates...");
+          }, 5000);
         }
       };
 

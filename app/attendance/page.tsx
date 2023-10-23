@@ -61,10 +61,15 @@ const Attendance = (props: Props) => {
         });
 
         const syncWithDb = async () => {
-          await axios.put(`${process.env.NEXT_PUBLIC_SERVER_DEV}/register`, {
-            id: clientId,
-            coords: [lat, lon],
-          });
+          const registeredOrNot = await axios.put(
+            `${process.env.NEXT_PUBLIC_SERVER_DEV}/register`,
+            {
+              id: clientId,
+              coords: [lat, lon],
+            }
+          );
+
+          alert("response from server: " + registeredOrNot);
         };
         syncWithDb();
       });

@@ -69,7 +69,7 @@ const Attendance = (props: Props) => {
             }
           );
 
-          alert("response from server: " + registeredOrNot);
+          console.log("response from server: " + registeredOrNot);
         };
         syncWithDb();
       });

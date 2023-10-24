@@ -69,6 +69,9 @@ const AttendenceID = (props: Props) => {
         const { coords, primaryID } = data;
         console.log("teacher: ", coords, primaryID);
 
+        setCanView(true);
+
+        /*
         if ("geolocation" in navigator) {
           navigator.geolocation.getCurrentPosition(function (position) {
             let lat = position.coords.latitude;
@@ -96,6 +99,7 @@ const AttendenceID = (props: Props) => {
             else alert("geolocation on device not giving coordinates...");
           }, 5000);
         }
+        */
       };
 
       getTeacherIdAndCoord();

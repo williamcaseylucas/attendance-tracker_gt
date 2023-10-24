@@ -61,7 +61,7 @@ const Attendance = (props: Props) => {
         });
 
         const syncWithDb = async () => {
-          const registeredOrNot = await axios.put(
+          const { data: registeredOrNot } = await axios.put(
             `${process.env.NEXT_PUBLIC_SERVER_DEV}/register`,
             {
               id: clientId,
